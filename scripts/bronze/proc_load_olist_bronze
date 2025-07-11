@@ -40,6 +40,7 @@ BEGIN
         BULK INSERT olist_bronze.customers
         FROM 'C:\olist_dwh_project\olist_ecommerce\datasets\customers.csv'
         WITH (
+            FORMAT = 'CSV',
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
             ROWTERMINATOR = '0x0a',
@@ -61,6 +62,7 @@ BEGIN
         BULK INSERT olist_bronze.geolocation
         FROM 'C:\olist_dwh_project\olist_ecommerce\datasets\geolocation.csv'
         WITH (
+            FORMAT = 'CSV',
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
             ROWTERMINATOR = '0x0a',
@@ -82,6 +84,7 @@ BEGIN
         BULK INSERT olist_bronze.order_items
         FROM 'C:\olist_dwh_project\olist_ecommerce\datasets\order_items.csv'
         WITH (
+            FORMAT = 'CSV',
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
             ROWTERMINATOR = '0x0a',
@@ -103,6 +106,7 @@ BEGIN
         BULK INSERT olist_bronze.order_payments
         FROM 'C:\olist_dwh_project\olist_ecommerce\datasets\order_payments.csv'
         WITH (
+            FORMAT = 'CSV',
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
             ROWTERMINATOR = '0x0a',
@@ -146,6 +150,7 @@ BEGIN
         BULK INSERT olist_bronze.orders
         FROM 'C:\olist_dwh_project\olist_ecommerce\datasets\orders.csv'
         WITH (
+            FORMAT = 'CSV',
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
             ROWTERMINATOR = '0x0a',
@@ -167,6 +172,7 @@ BEGIN
         BULK INSERT olist_bronze.products
         FROM 'C:\olist_dwh_project\olist_ecommerce\datasets\products.csv'
         WITH (
+            FORMAT = 'CSV',
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
             ROWTERMINATOR = '0x0a',
@@ -188,6 +194,7 @@ BEGIN
         BULK INSERT olist_bronze.sellers
         FROM 'C:\olist_dwh_project\olist_ecommerce\datasets\sellers.csv'
         WITH (
+            FORMAT = 'CSV',
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
             ROWTERMINATOR = '0x0a',
@@ -209,6 +216,7 @@ BEGIN
         BULK INSERT olist_bronze.product_category_name_translation
         FROM 'C:\olist_dwh_project\olist_ecommerce\datasets\product_category_name_translation.csv'
         WITH (
+            FORMAT = 'CSV',
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
             ROWTERMINATOR = '0x0a',
