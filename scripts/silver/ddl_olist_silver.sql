@@ -113,8 +113,7 @@ GO
 CREATE TABLE olist_silver.product_category_name_translation (
     product_category_name NVARCHAR(100) NOT NULL,
     product_category_name_english NVARCHAR(100) NOT NULL,
-    dwh_create_date DATETIME2 DEFAULT GETDATE(),
-    CONSTRAINT PK_product_category_name_translation PRIMARY KEY(product_category_name)
+    dwh_create_date DATETIME2 DEFAULT GETDATE()
 );
 GO
 
@@ -192,12 +191,6 @@ ALTER TABLE olist_silver.orders
     ADD CONSTRAINT FK_orders_customers
     FOREIGN KEY(customer_id)
     REFERENCES olist_silver.customers(customer_id);
-GO
-
-ALTER TABLE olist_silver.products
-    ADD CONSTRAINT FK_products_name_translation
-    FOREIGN KEY(product_category_name)
-    REFERENCES olist_silver.product_category_name_translation(product_category_name);
 GO
 
 ALTER TABLE olist_silver.order_items
