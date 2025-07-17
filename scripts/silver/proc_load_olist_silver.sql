@@ -29,8 +29,8 @@ BEGIN
 	BEGIN TRY
 		SET @batch_start_time = GETDATE();
 		PRINT '================================================';
-    PRINT 'Loading Silver Layer';
-    PRINT '================================================';
+    		PRINT 'Loading Silver Layer';
+    		PRINT '================================================';
 
 		PRINT '------------------------------------------------';
 		PRINT 'Loading Customers Table';
