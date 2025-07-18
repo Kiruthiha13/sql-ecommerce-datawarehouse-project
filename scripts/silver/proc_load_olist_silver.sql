@@ -25,7 +25,8 @@ CREATE OR ALTER PROCEDURE olist_silver.load_olist_silver AS
 BEGIN
 	DECLARE 
 	@start_time DATETIME, @end_time DATETIME, @batch_start_time DATETIME, @batch_end_time DATETIME,
-	@reference_date DATE = '2025-07-15';
+	@global_anchor_date DATE = '2020-04-09', @reference_date DATE = '2025-07-15';
+	DECLARE @global_shift_days INT = DATEDIFF(DAY, @global_anchor_date, @reference_date);
 	BEGIN TRY
 		SET @batch_start_time = GETDATE();
 		PRINT '================================================';
@@ -113,11 +114,7 @@ BEGIN
 		PRINT '>> Inserting Data Into: olist_silver.orders';
 
 		-- Calculate shift for order dates to reflect recent dates
-		DECLARE @orders_original_anchor_date DATE = '2018-11-12';
-
-		DECLARE @order_shift_days INT =
-			DATEDIFF(DAY, @orders_original_anchor_date, @reference_date);
-
+		
 		WITH filtered_orders AS (
 			SELECT
 				o.*
@@ -139,26 +136,62 @@ BEGIN
 			order_approved_at,
 			order_delivered_carrier_date,
 			order_delivered_customer_date,
-			order_estimated_delivery_date
+			order_estimated_delivery_date,
+			issue_type
 		)
 		SELECT
 			order_id,
 			customer_id,
 			UPPER(TRIM(order_status)) AS order_status, -- Normalizing order_status
-			DATEADD(DAY, @order_shift_days, order_purchase_timestamp) AS order_purchase_timestamp,
+			DATEADD(DAY, @global_shift_days, order_purchase_timestamp) AS order_purchase_timestamp,
 			CASE
 				WHEN order_approved_at IS NULL THEN NULL
-				ELSE DATEADD(DAY, @order_shift_days, order_approved_at)
+				ELSE DATEADD(DAY, @global_shift_days, order_approved_at)
 			END AS order_approved_at,
 			CASE
 				WHEN order_delivered_carrier_date IS NULL THEN NULL
-				ELSE DATEADD(DAY, @order_shift_days, order_delivered_carrier_date)
+				ELSE DATEADD(DAY, @global_shift_days, order_delivered_carrier_date)
 			END AS order_delivered_carrier_date,
 			CASE
 				WHEN order_delivered_customer_date IS NULL THEN NULL
-				ELSE DATEADD(DAY, @order_shift_days, order_delivered_customer_date)
+				ELSE DATEADD(DAY, @global_shift_days, order_delivered_customer_date)
 			END AS order_delivered_customer_date,
-			DATEADD(DAY, @order_shift_days, order_estimated_delivery_date) AS order_estimated_delivery_date
+			DATEADD(DAY, @global_shift_days, order_estimated_delivery_date) AS order_estimated_delivery_date,
+
+			CASE 
+			  	-- carrier before approval
+			  	WHEN order_delivered_carrier_date IS NOT NULL AND order_approved_at IS NOT NULL 
+				   AND order_delivered_carrier_date < order_approved_at 
+				   THEN 'carrier_before_approval'
+	
+			  	-- customer before carrier
+			  	WHEN order_delivered_customer_date IS NOT NULL AND order_delivered_carrier_date IS NOT NULL 
+				   AND order_delivered_customer_date < order_delivered_carrier_date 
+				   THEN 'customer_before_carrier'
+	
+			  	-- delivered after estimated
+			  	WHEN order_delivered_customer_date IS NOT NULL 
+				   AND order_delivered_customer_date > order_estimated_delivery_date 
+				   THEN 'delivered_after_estimate'
+	
+			  	-- 5. Approved/shipped/delivered orders must have order_approved_at
+			  	WHEN order_status IN ('APPROVED', 'SHIPPED', 'DELIVERED') 
+				   AND order_approved_at IS NULL 
+				   THEN 'missing_approval'
+	
+			  	-- Non-delivered orders should not have delivered status
+			  	WHEN order_status = 'DELIVERED' 
+				   AND order_delivered_customer_date IS NULL 
+				   THEN 'invalid_delivery_status'
+	
+			  	-- General NULL check for important date fields
+			  	WHEN order_approved_at IS NULL 
+				   OR order_delivered_carrier_date IS NULL 
+				   OR order_delivered_customer_date IS NULL 
+				   THEN 'not_delivered'
+				-- Else it's clean
+			  	ELSE 'valid'
+			END AS issue_type
 		FROM filtered_orders;
 		SET @end_time = GETDATE();
 		PRINT '>> Load Duration: ' + CAST(DATEDIFF(SECOND, @start_time, @end_time) AS NVARCHAR) + ' seconds';
@@ -212,7 +245,7 @@ BEGIN
 		SELECT
 			product_id,
 			product_category_name,
-      			-- Replacing blank values with 0
+      		-- Replacing blank values with 0
 			ISNULL(product_name_lenght, 0) AS product_name_length,
 			ISNULL(product_description_lenght, 0) AS product_description_length,
 			ISNULL(product_photos_qty, 0) AS product_photos_qty,
@@ -267,6 +300,8 @@ BEGIN
 		PRINT '>> Deleting Table: olist_silver.order_items';
 		DELETE FROM olist_silver.order_items;
 		PRINT '>> Inserting Data Into: olist_silver.order_items';
+		-- Calculate shift for shipping_limit_date to reflect recent dates
+		
 		INSERT INTO olist_silver.order_items (
 			order_id,
 			order_item_id,
@@ -281,7 +316,7 @@ BEGIN
 			order_item_id,
 			product_id,
 			seller_id,
-			shipping_limit_date,
+			DATEADD(DAY, @global_shift_days, shipping_limit_date) AS shipping_limit_date,
 			price,
 			freight_value
 		FROM olist_bronze.order_items
@@ -351,10 +386,7 @@ BEGIN
 		PRINT '>> Inserting Data Into: olist_silver.order_reviews';
 		
 		-- Calculate shift for review dates to reflect recent dates
-		DECLARE @review_original_anchor_date DATE = '2018-10-29';
-		DECLARE @review_shift_days INT =
-		DATEDIFF(DAY, @review_original_anchor_date, @reference_date);
-
+	
 		INSERT INTO olist_silver.order_reviews (
 			review_id,
 			order_id,
@@ -371,10 +403,10 @@ BEGIN
 			-- Replace empty review titles or messages with default text 
 			ISNULL(NULLIF(TRIM(review_comment_title), ''), 'No comments'),
 			ISNULL(NULLIF(TRIM(review_comment_message), ''), 'No messages'),
-			DATEADD(DAY, @review_shift_days, review_creation_date) AS review_creation_date,
+			DATEADD(DAY, @global_shift_days, review_creation_date) AS review_creation_date,
 			CASE
 				WHEN review_answer_timestamp IS NOT NULL THEN
-					DATEADD(DAY, @review_shift_days, review_answer_timestamp)
+					DATEADD(DAY, @global_shift_days, review_answer_timestamp)
 				ELSE NULL
 			END AS review_answer_timestamp
 		FROM (
