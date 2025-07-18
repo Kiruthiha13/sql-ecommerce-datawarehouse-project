@@ -105,6 +105,7 @@ CREATE TABLE olist_silver.orders (
     order_delivered_carrier_date DATETIME NULL,
     order_delivered_customer_date DATETIME NULL,
     order_estimated_delivery_date DATETIME NOT NULL,
+    issue_type NVARCHAR(100) NOT NULL,
     dwh_create_date DATETIME2 DEFAULT GETDATE(),
     CONSTRAINT PK_orders PRIMARY KEY(order_id)
 );
