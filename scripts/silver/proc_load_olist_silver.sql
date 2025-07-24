@@ -53,7 +53,7 @@ BEGIN
 			customer_id,
 			customer_unique_id,
 			customer_zip_code_prefix,
-			-- Normalizing customer city and state
+			-- Standardizing customer city and state
 			UPPER(TRIM(customer_city)) AS customer_city, 
 			UPPER(TRIM(customer_state)) AS customer_state
 		FROM olist_bronze.customers
@@ -87,7 +87,7 @@ BEGIN
 			geolocation_zip_code_prefix,
 			geolocation_lat,
 			geolocation_lng,
-			-- Normalizing geolocation city and state
+			-- Standardizing geolocation city and state
 			UPPER(TRIM(geolocation_city)) AS geolocation_city, 
 			UPPER(TRIM(geolocation_state)) AS geolocation_state
 		FROM olist_bronze.geolocation
@@ -142,7 +142,7 @@ BEGIN
 		SELECT
 			order_id,
 			customer_id,
-			UPPER(TRIM(order_status)) AS order_status, -- Normalizing order_status
+			UPPER(TRIM(order_status)) AS order_status, -- Standardizing order_status
 			DATEADD(DAY, @global_shift_days, order_purchase_timestamp) AS order_purchase_timestamp,
 			CASE
 				WHEN order_approved_at IS NULL THEN NULL
@@ -174,7 +174,7 @@ BEGIN
 				   AND order_delivered_customer_date > order_estimated_delivery_date 
 				   THEN 'delivered_after_estimate'
 	
-			  	-- 5. Approved/shipped/delivered orders must have order_approved_at
+			  	-- Approved/shipped/delivered orders must have order_approved_at
 			  	WHEN order_status IN ('APPROVED', 'SHIPPED', 'DELIVERED') 
 				   AND order_approved_at IS NULL 
 				   THEN 'missing_approval'
@@ -211,7 +211,7 @@ BEGIN
 			product_category_name_english
 		)
 		SELECT 
-			-- Normalizing category names
+			-- Standardizing category names
 			TRIM(product_category_name) as product_category_name ,
 			TRIM(product_category_name_english) as product_category_name_english
 		FROM olist_bronze.product_category_name_translation
@@ -245,7 +245,7 @@ BEGIN
 		SELECT
 			product_id,
 			product_category_name,
-      		-- Replacing blank values with 0
+      			-- Replacing blank values with 0
 			ISNULL(product_name_lenght, 0) AS product_name_length,
 			ISNULL(product_description_lenght, 0) AS product_description_length,
 			ISNULL(product_photos_qty, 0) AS product_photos_qty,
@@ -278,7 +278,7 @@ BEGIN
 		SELECT
 			seller_id,
 			seller_zip_code_prefix,
-			-- Normalizing seller city and state
+			-- Standardizing seller city and state
 			UPPER(TRIM(seller_city)) AS seller_city,
 			UPPER(TRIM(seller_state)) AS seller_state
 		FROM olist_bronze.sellers
@@ -360,7 +360,7 @@ BEGIN
 						ELSE payment_type
 					END
 					)
-				 ) AS payment_type, -- Translating payment type and Normalizing
+				 ) AS payment_type, -- Translating payment type and Standardizing
 			payment_installments,
 			payment_value
 		FROM olist_bronze.order_payments
