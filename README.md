@@ -10,70 +10,46 @@ This project implements a modern data architecture using the Medallion (Lakehous
 
 🔹 **Bronze Layer**
 
-Ingests raw data from Olist-provided CSV files.
-
-Data is stored as-is with no transformations.
-
-Serves as the single source of truth for raw historical data.
+1. Ingests raw data from Olist-provided CSV files.
+2. Data is stored as-is with no transformations.
+3. Serves as the single source of truth for raw historical data.
 
 🔸 **Silver Layer**
 
-Performs data cleaning, transformation, and standardization.
-
-Joins and enriches datasets (e.g., decoding category names, formatting dates).
+1. Performs data cleaning, transformation, and standardization.
+2. Joins and enriches datasets (e.g., decoding category names, formatting dates).
 
 Provides clean and transformed data.
 
 ⭐ **Gold Layer**
 
-Delivers a Star Schema model with dimension and fact views.
-
-Optimized for business reporting, analytics, and dashboarding.
-
-Includes measures like total sales, total orders, customer spend, delivery time, and review score.
+1. Delivers a Star Schema model with dimension and fact views.
+2. Optimized for business reporting, analytics, and dashboarding.
 
 ## 📌 Project Objectives
 
 This project covers the full lifecycle of a modern analytics pipeline:
 
 🔧 **Data Engineering**
-Design a scalable warehouse using Medallion architecture.
 
-Create ETL pipelines to ingest and transform raw Olist data.
-
-Model star schema using SQL views.
-
-Validate data quality, check nulls, handle outliers, and define business rules.
+1. Design a scalable warehouse using Medallion architecture.
+2. Create ETL pipelines to ingest and transform raw Olist data.
+3. Model star schema using SQL views.
+4. Validate data quality, check nulls, handle outliers, and define business rules.
 
 📊 **Data Analysis & Reporting**
-Explore and document the database schema, column types, and relationships.
 
-Analyze key business entities like customers, orders, products, sellers, and payments.
-
-Segment customers (repeat vs new), calculate product performance, and measure delivery quality.
-
-Uncover trends and correlations (e.g., impact of delivery time on review score).
-
-Generate metrics like:
-
-Total sales, total orders, average price
-
-Customer spend patterns
-
-Review distributions and delivery delays
+1. Explore and document the database schema, column types, and relationships.
+2. Analyze key business entities like customers, orders, products, sellers, and payments.
+3. Segment customers (repeat vs new), calculate product performance, and measure delivery quality.
+4. Uncover trends and correlations (e.g., impact of delivery time on review score).
 
 ## 🔍 Analytical Focus Areas
-Customer Behavior
-Repeat purchases, spend, geographic distribution, and segmentation
 
-Product Performance
-Top-selling categories, freight cost impacts, average prices
-
-Sales & Operations Trends
-Order volume over time, delivery delays, and payment preferences
-
-Quality Metrics
-Delivery performance, review scores, and return reasons
+1. Customer Behavior: Repeat purchases, spend, geographic distribution, and segmentation
+2. Product Performance: Top-selling categories, freight cost impacts, average prices
+3. Sales & Operations Trends: Order volume over time, delivery delays, and payment preferences
+4. Quality Metrics: Delivery performance, review scores, and return reasons
 
 🧑‍💻 About Me
 Hi there! I’m Kiruthiha — an IT professional with a strong focus on data engineering and analytics.
