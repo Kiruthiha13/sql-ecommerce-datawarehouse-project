@@ -18,8 +18,7 @@ This project implements a modern data architecture using the Medallion (Lakehous
 
 1. Performs data cleaning, transformation, and standardization.
 2. Joins and enriches datasets (e.g., decoding category names, formatting dates).
-
-Provides clean and transformed data.
+3. Provides clean and transformed data.
 
 ⭐ **Gold Layer**
 
@@ -37,13 +36,11 @@ This project covers the full lifecycle of a modern analytics pipeline:
 3. Model star schema using SQL views.
 4. Validate data quality, check nulls, handle outliers, and define business rules.
 
-📊 **Data Analysis & Reporting**
+📊 **Data Analysis**
 
 1. Explore and document the database schema, column types, and relationships.
 2. Analyze key business entities like customers, orders, products, sellers, and payments.
-3. Segment customers (repeat vs new), calculate product performance, and measure delivery quality.
-4. Uncover trends and correlations (e.g., impact of delivery time on review score).
-
+   
 ## 🔍 Analytical Focus Areas
 
 1. Customer Behavior: Repeat purchases, spend, geographic distribution, and segmentation
