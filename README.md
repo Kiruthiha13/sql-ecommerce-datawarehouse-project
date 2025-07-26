@@ -52,7 +52,7 @@ This project covers the full lifecycle of a modern analytics pipeline:
 4. Quality Metrics: Delivery performance, review scores, and return reasons
 
 🧑‍💻 About Me
-Hi there! I’m Kiruthiha — an IT professional with a strong focus on data engineering and analytics.
-This project is a demonstration of my skills in transforming raw data into clear, business-ready datasets that drive insights, decision-making, and impact.
+
+Hi there! I'm Kiruthiha. I’m an IT professional working extensively with data to drive insights, support decision-making, and improve business outcomes. I’m passionate about turning raw data into meaningful stories through analysis and visualization.
 
 Let’s connect and discuss how data can power better business outcomes! 🚀
