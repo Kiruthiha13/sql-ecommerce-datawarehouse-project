@@ -21,7 +21,7 @@ SELECT
     MIN(order_purchase_timestamp) AS first_order_date,
     MAX(order_purchase_timestamp) AS last_order_date,
     DATEDIFF(MONTH, MIN(order_purchase_timestamp), MAX(order_purchase_timestamp)) AS order_range_months
-FROM olist_gold.dim_orders;
+FROM olist_gold.fact_order_summary;
 
 -- =============================================================================
 -- Explore delivery date range
@@ -30,7 +30,7 @@ SELECT
     MIN(order_delivered_customer_date) AS first_delivery_date,
     MAX(order_delivered_customer_date) AS last_delivery_date,
     DATEDIFF(DAY, MIN(order_delivered_customer_date), MAX(order_delivered_customer_date)) AS delivery_span_days
-FROM olist_gold.dim_orders;
+FROM olist_gold.fact_order_summary;
 
 -- =============================================================================
 -- Explore product shipping time window (shipping_limit_date)
@@ -39,4 +39,4 @@ SELECT
     MIN(shipping_limit_date) AS earliest_shipping_limit,
     MAX(shipping_limit_date) AS latest_shipping_limit,
     DATEDIFF(DAY, MIN(shipping_limit_date), MAX(shipping_limit_date)) AS shipping_window_days
-FROM olist_gold.fact_order_items;
+FROM olist_gold.fact_order_summary;
