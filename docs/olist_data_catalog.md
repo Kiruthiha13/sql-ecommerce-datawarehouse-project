@@ -42,7 +42,7 @@ The Gold Layer represents the business-ready analytical data model, structured u
 | seller_sk   | INT  | 	Surrogate key for the seller dimension.                      |
 | seller_id   | NVARCHAR(50)          | Original seller ID from the transactional system.                               |
 | seller_zip_code_prefix    | NVARCHAR(10)          | Postal code prefix of the seller's location.                              |
-| seller_city      | NVARCHAR(50)          | City where the seller operates from.                                                          |
+| seller_city      | NVARCHAR(100)          | City where the seller operates from.                                                          |
 | seller_state   | NVARCHAR(50)          | State or region where the seller is located.                                          |
 
 ---
