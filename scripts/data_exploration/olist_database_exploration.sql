@@ -37,9 +37,7 @@ SELECT
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE 
     TABLE_NAME = 'dim_customers' 
-    OR TABLE_NAME = 'dim_orders'
-    OR TABLE_NAME = 'dim_payments'
     OR TABLE_NAME = 'dim_products'
-    OR TABLE_NAME = 'dim_reviews'
     OR TABLE_NAME = 'dim_sellers'
-    OR TABLE_NAME = 'fact_order_items';
+    OR TABLE_NAME = 'dim_dates'
+    OR TABLE_NAME = 'fact_order_summary';
