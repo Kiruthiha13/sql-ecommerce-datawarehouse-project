@@ -37,29 +37,23 @@ ORDER BY product_category_name;
 -- =============================================================================
 SELECT DISTINCT 
     order_status
-FROM olist_gold.dim_orders
+FROM olist_gold.fact_order_summary
 ORDER BY order_status;
-
-SELECT DISTINCT 
-    issue_type
-FROM olist_gold.dim_orders
-ORDER BY issue_type;
 
 -- =============================================================================
 -- Payments: Explore unique payment types and categories
 -- =============================================================================
 SELECT DISTINCT 
-    payment_type, 
-    payment_category
-FROM olist_gold.dim_payments
-ORDER BY payment_category, payment_type;
+    payment_type
+FROM olist_gold.fact_order_summary
+ORDER BY payment_type;
 
 -- =============================================================================
 -- Reviews: Explore unique review scores
 -- =============================================================================
 SELECT DISTINCT 
     review_score
-FROM olist_gold.dim_reviews
+FROM olist_gold.fact_order_summary
 ORDER BY review_score;
 
 -- =============================================================================
