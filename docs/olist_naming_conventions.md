@@ -37,7 +37,7 @@ This document outlines the naming conventions used for schemas, tables, views, c
 - Example: `customers` → Customer information from the Olist system.
 
 ### **Silver Rules**
-- All names must start with the source system name, and table names must match their original names without renaming.
+- All names must start with the table name, and table names must match their original names without renaming.
 - **`<entity>`**   
 - `<entity>`: Exact table name from the source system.  
 - Example: `customers` → Customer information from the Olist system.
