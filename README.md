@@ -6,7 +6,7 @@ This end-to-end data warehousing and analytics solution demonstrates how to turn
 
 ## 🧱 Data Architecture: Medallion Model
 
-This project implements a modern data architecture using the Medallion (Lakehouse) Architecture, composed of three layers:
+This project implements a modern data architecture using the Medallion Architecture, composed of three layers:
 
 🔹 **Bronze Layer**
 
@@ -43,10 +43,7 @@ This project covers the full lifecycle of a modern analytics pipeline:
    
 ## 🔍 Analytical Focus Areas
 
-1. Customer Behavior: Repeat purchases, spend, geographic distribution, and segmentation
-2. Product Performance: Top-selling categories, freight cost impacts, average prices
-3. Sales & Operations Trends: Order volume over time, delivery delays, and payment preferences
-4. Quality Metrics: Delivery performance, review scores, and return reasons
+1. Performance Analysis: Comprehensive analysis of product profitability, sales trends, return behavior, and seller performance in an e-commerce marketplace.
 
 🧑‍💻 About Me
 
