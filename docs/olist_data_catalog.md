@@ -43,7 +43,7 @@ The Gold Layer represents the business-ready analytical data model, structured u
 | seller_id   | NVARCHAR(50)          | Original seller ID from the transactional system.                               |
 | seller_zip_code_prefix    | NVARCHAR(10)          | Postal code prefix of the seller's location.                              |
 | seller_city      | NVARCHAR(100)          | City where the seller operates from.                                                          |
-| seller_state   | NVARCHAR(50)          | State or region where the seller is located.                                          |
+| seller_state   | NVARCHAR(10)          | State or region where the seller is located.                                          |
 
 ---
 
@@ -74,7 +74,7 @@ The Gold Layer represents the business-ready analytical data model, structured u
 | product_sk      | INT          | Foreign key to `dim_products`.                                                          |
 | seller_sk   | INT         | Foreign key to `dim_sellers`.                                          |
 | date_sk | INT | Foreign key to `dim_dates`(based on order purchase date). |
-| order_status | NVARCHAR(50) | Current status of the order (e.g., delivered, shipped, canceled). |
+| order_status | NVARCHAR(25) | Current status of the order (e.g., delivered, shipped, canceled). |
 | order_purchase_timestamp | DATETIME | Timestamp when the order was placed. |
 | order_approved_at | DATETIME | Timestamp when the order was approved. |
 | order_delivery_carrier_date | DATETIME | Timestamp when the item was handed to carrier. |
