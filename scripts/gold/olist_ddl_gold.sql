@@ -14,20 +14,20 @@ Usage:
 ===============================================================================
 */
 
--- =============================================================================
--- Create Dimension: olist_gold.dim_customers
--- Captures customer demographic and geographic details.
--- =============================================================================
-
 USE olist_datawarehouse;
 GO
 
+-- ============================================================================
+-- Create Dimension: olist_gold.dim_customers
+-- Captures customer demographic and geographic details.
+-- ============================================================================
 IF OBJECT_ID('olist_gold.dim_customers', 'V') IS NOT NULL
     DROP VIEW olist_gold.dim_customers;
 GO
 
 CREATE VIEW olist_gold.dim_customers AS
-SELECT  
+SELECT
+    ROW_NUMBER() OVER (ORDER BY customer_id) AS customer_sk,
     customer_id,
     customer_unique_id,
     customer_zip_code_prefix,
@@ -36,87 +36,42 @@ SELECT
 FROM olist_silver.customers;
 GO
 
--- =============================================================================
+-- ============================================================================
 -- Create Dimension: olist_gold.dim_products
 -- Provides product categories and basic product attributes.
--- =============================================================================
-
+-- ============================================================================
 IF OBJECT_ID('olist_gold.dim_products', 'V') IS NOT NULL
     DROP VIEW olist_gold.dim_products;
 GO
 
 CREATE VIEW olist_gold.dim_products AS
 SELECT
+    ROW_NUMBER() OVER (ORDER BY p.product_id) AS product_sk,
     p.product_id,
-    COALESCE(pt.product_category_name_english, 'Unknown') AS product_category_name,
-    product_weight_g AS product_weight
+    COALESCE(t.product_category_name_english, 'Unknown') AS product_category_name,
+    p.product_name_length,
+    p.product_description_length,
+    p.product_photos_qty,
+    p.product_weight_g,
+    p.product_length_cm,
+    p.product_height_cm,
+    p.product_width_cm
 FROM olist_silver.products p
-LEFT JOIN olist_silver.product_category_name_translation pt 
-    ON p.product_category_name = pt.product_category_name
-GROUP BY
-    p.product_id,
-    product_weight_g,
-    pt.product_category_name_english;
+LEFT JOIN olist_silver.product_category_name_translation t 
+    ON p.product_category_name = t.product_category_name;
 GO
 
--- =============================================================================
--- Create Dimension: olist_gold.dim_orders
--- Tracks order lifecycle and timestamps.
--- =============================================================================
-
-IF OBJECT_ID('olist_gold.dim_orders', 'V') IS NOT NULL
-    DROP VIEW olist_gold.dim_orders;
-GO
-
-CREATE VIEW olist_gold.dim_orders AS
-SELECT
-    order_id,
-    customer_id,
-    order_status,
-    order_purchase_timestamp,
-    order_approved_at,
-    order_delivered_carrier_date,
-    order_delivered_customer_date,
-    order_estimated_delivery_date,
-    issue_type 
-FROM olist_silver.orders;
-GO
-
--- =============================================================================
--- Create Dimension: olist_gold.dim_payments
--- Describes payment method and installment structure.
--- =============================================================================
-
-IF OBJECT_ID('olist_gold.dim_payments', 'V') IS NOT NULL
-    DROP VIEW olist_gold.dim_payments;
-GO
-
-CREATE VIEW olist_gold.dim_payments AS
-SELECT
-    order_id,
-    payment_type,
-    payment_sequential,
-    payment_installments,
-    payment_value,
-    CASE 
-        WHEN payment_type IN ('CREDIT_CARD', 'DEBIT_CARD') THEN 'Digital'
-        WHEN payment_type IN ('VOUCHER', 'BANK_SLIP') THEN 'Non-Digital'
-        ELSE 'Unknown'
-    END AS payment_category
-FROM olist_silver.order_payments;
-GO
-
--- =============================================================================
+-- ============================================================================
 -- Create Dimension: olist_gold.dim_sellers
 -- Basic seller location information.
--- =============================================================================
-
+-- ============================================================================
 IF OBJECT_ID('olist_gold.dim_sellers', 'V') IS NOT NULL
     DROP VIEW olist_gold.dim_sellers;
 GO
 
 CREATE VIEW olist_gold.dim_sellers AS
 SELECT
+    ROW_NUMBER() OVER (ORDER BY seller_id) AS seller_sk,
     seller_id,
     seller_zip_code_prefix,
     seller_city,
@@ -124,40 +79,87 @@ SELECT
 FROM olist_silver.sellers;
 GO
 
--- =============================================================================
--- Create Dimension: olist_gold.dim_reviews
--- Captures review scores associated with orders.
--- =============================================================================
-
-IF OBJECT_ID('olist_gold.dim_reviews', 'V') IS NOT NULL
-    DROP VIEW olist_gold.dim_reviews;
+-- ============================================================================
+-- Create Dimension: dim_dates
+-- Calendar dimension providing derived attributes (year, month, day, weekday)
+-- from order purchase timestamps to support time-based analysis.
+-- ============================================================================
+IF OBJECT_ID('olist_gold.dim_dates', 'V') IS NOT NULL
+    DROP VIEW olist_gold.dim_dates;
 GO
 
-CREATE VIEW olist_gold.dim_reviews AS
+CREATE VIEW olist_gold.dim_dates AS
+WITH distinct_dates AS (
+    SELECT DISTINCT
+        CAST(order_purchase_timestamp AS DATE) AS calendar_date
+    FROM olist_silver.orders
+)
+SELECT 
+    ROW_NUMBER() OVER (ORDER BY calendar_date) AS date_sk,
+    calendar_date,
+    DATEPART(YEAR, calendar_date) AS year,
+    DATEPART(MONTH, calendar_date) AS month,
+    DATEPART(DAY, calendar_date) AS day,
+    DATENAME(WEEKDAY, calendar_date) AS weekday_name
+FROM distinct_dates;
+GO
+
+-- ==================================================================================
+-- Create FACT: fact_order_summary
+-- Central fact view representing individual order items enriched with customer,
+-- product, seller, payment, review, and date surrogate keys for analytical queries.
+-- ==================================================================================
+IF OBJECT_ID('olist_gold.fact_order_summary', 'V') IS NOT NULL
+    DROP VIEW olist_gold.fact_order_summary;
+GO
+
+CREATE VIEW olist_gold.fact_order_summary AS
+-- Aggregate payments
+WITH payments_agg AS (
+    SELECT 
+        order_id,
+        MAX(payment_type) AS payment_type,
+        MAX(payment_installments) AS payment_installments,
+        SUM(payment_value) AS payment_value
+    FROM olist_silver.order_payments
+    GROUP BY order_id
+),
+
+-- Aggregate reviews
+reviews_agg AS (
+    SELECT 
+        order_id,
+        MAX(review_score) AS review_score
+    FROM olist_silver.order_reviews
+    GROUP BY order_id
+)
+
+-- Now join these to the fact
 SELECT
-    review_id,
-    order_id,
-    review_score
-FROM olist_silver.order_reviews;
-GO
-
--- =============================================================================
--- Create Fact: olist_gold.fact_order_items
--- Line-level facts including prices, freight, and items per order.
--- =============================================================================
-
-IF OBJECT_ID('olist_gold.fact_order_items', 'V') IS NOT NULL
-    DROP VIEW olist_gold.fact_order_items;
-GO
-
-CREATE VIEW olist_gold.fact_order_items AS
-SELECT
-    order_id,
-    order_item_id,
-    product_id,
-    seller_id,
-    shipping_limit_date,
-    price,
-    freight_value
-FROM olist_silver.order_items;
-GO
+    oi.order_id,
+    oi.order_item_id,
+    dc.customer_sk,
+    dp.product_sk,
+    ds.seller_sk,
+    dd.date_sk,
+    o.order_status,
+    o.order_purchase_timestamp,
+    o.order_approved_at,
+    o.order_delivered_carrier_date,
+    o.order_delivered_customer_date,
+    o.order_estimated_delivery_date,
+    oi.shipping_limit_date,
+    oi.price,
+    oi.freight_value,
+    p.payment_type,
+    p.payment_installments,
+    p.payment_value,
+    r.review_score
+FROM olist_silver.order_items oi
+JOIN olist_silver.orders o ON oi.order_id = o.order_id
+JOIN olist_gold.dim_customers dc ON o.customer_id = dc.customer_id
+JOIN olist_gold.dim_products dp ON oi.product_id = dp.product_id
+JOIN olist_gold.dim_sellers ds ON oi.seller_id = ds.seller_id
+JOIN olist_gold.dim_dates dd ON CAST(o.order_purchase_timestamp AS DATE) = dd.calendar_date
+LEFT JOIN payments_agg p ON oi.order_id = p.order_id
+LEFT JOIN reviews_agg r ON oi.order_id = r.order_id;
