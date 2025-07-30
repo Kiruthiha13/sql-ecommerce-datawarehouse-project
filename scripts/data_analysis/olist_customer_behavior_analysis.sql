@@ -54,6 +54,7 @@ ORDER BY f.payment_installments;
 -- ================================================
 -- Delivery Speed & Shipping Cost vs Review Score
 -- ================================================
+
 SELECT 
     f.review_score,
     COUNT(*) AS total_orders,
@@ -69,6 +70,7 @@ ORDER BY f.review_score DESC;
 -- ================================================
 -- Customer Churn Analysis
 -- ================================================
+
 WITH customer_activity AS (
     SELECT 
         c.customer_id,
