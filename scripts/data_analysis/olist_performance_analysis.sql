@@ -1,7 +1,3 @@
--- =============================================================================
--- Products, Sellers and Sales Performance Analysis 
--- =============================================================================
-
 USE olist_datawarehouse;
 GO
 
@@ -43,36 +39,31 @@ WHERE f.price IS NOT NULL
 GROUP BY d.year, d.month, p.product_category_name
 ORDER BY p.product_category_name, d.year, d.month;
 
--- =============================================================================
--- 3. Product Return Risk
--- Identifies frequently returned or low-rated products and trends by category.
--- =============================================================================
+-- ============================================================================
+-- 3. Seasonal Profitability Analysis
+-- Groups data by seasons to identify high-performing time periods
+-- ============================================================================
 
--- Product-level risk indicators
 SELECT 
-    p.product_category_name,
-    p.product_id,
-    COUNT(*) AS issue_count,
-    CAST(ROUND(AVG(f.price), 2) AS DECIMAL(10,2)) AS avg_price,
-    ROUND(AVG(p.product_weight), 2) AS avg_weight,
-    COUNT(CASE WHEN f.order_status = 'canceled' THEN 1 END) AS cancellations,
-    COUNT(CASE WHEN f.review_score <= 2 THEN 1 END) AS low_reviews
+    CASE 
+        WHEN d.month IN (12, 1, 2) THEN 'Winter'
+        WHEN d.month IN (3, 4, 5) THEN 'Spring'
+        WHEN d.month IN (6, 7, 8) THEN 'Summer'
+        WHEN d.month IN (9, 10, 11) THEN 'Fall'
+    END AS season,
+    COUNT(DISTINCT f.order_id) AS total_orders,
+    ROUND(SUM(f.price), 2) AS total_revenue,
+    ROUND(SUM(f.price - f.freight_value), 2) AS total_profit_margin,
+    CAST(ROUND(AVG(f.price - f.freight_value), 2) AS DECIMAL(10,2)) AS avg_profit_margin
 FROM olist_gold.fact_order_summary f
-JOIN olist_gold.dim_products p ON f.product_sk = p.product_sk
-WHERE f.order_status = 'canceled'
-   OR f.review_score <= 2
-GROUP BY p.product_category_name, p.product_id
-HAVING COUNT(*) >= 5  -- Filter for frequently problematic products
-ORDER BY issue_count DESC;
-
--- Category-level return trends
-SELECT 
-    p.product_category_name,
-    COUNT(*) AS total_issues,
-    COUNT(DISTINCT p.product_id) AS affected_products
-FROM olist_gold.fact_order_summary f
-JOIN olist_gold.dim_products p ON f.product_sk = p.product_sk
-WHERE f.order_status = 'canceled'
-   OR f.review_score <= 2
-GROUP BY p.product_category_name
-ORDER BY total_issues DESC;
+JOIN olist_gold.dim_dates d 
+    ON f.date_sk = d.date_sk
+WHERE f.price IS NOT NULL AND f.freight_value IS NOT NULL
+GROUP BY 
+    CASE 
+        WHEN d.month IN (12, 1, 2) THEN 'Winter'
+        WHEN d.month IN (3, 4, 5) THEN 'Spring'
+        WHEN d.month IN (6, 7, 8) THEN 'Summer'
+        WHEN d.month IN (9, 10, 11) THEN 'Fall'
+    END
+ORDER BY season;
