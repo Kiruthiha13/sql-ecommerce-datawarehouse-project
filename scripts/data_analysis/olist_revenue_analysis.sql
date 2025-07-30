@@ -1,5 +1,19 @@
+/*
+============================================================================
+REVENUE ANALYSIS: 
+This script provides insights into revenue drivers by analyzing payment 
+method performance, monthly revenue trends, shipping cost impact by order 
+size, and seller contribution concentration (Pareto analysis). It helps 
+uncover which payment types, time periods, and seller segments drive the 
+most value and how profit margins are affected by shipping costs.
+============================================================================
+*/
+
+USE olist_datawarehouse;
+GO
+
 -- ===============================================================
--- Payment Method Performance: Order Value & Cancellation Rate
+-- 1. Payment Method Performance: Order Value & Cancellation Rate
 -- ===============================================================
 
 SELECT 
@@ -14,7 +28,7 @@ GROUP BY f.payment_type
 ORDER BY avg_order_value DESC;
 
 -- ===============================================================
--- Monthly Revenue, AOV, and Order Volume Trend Analysis
+-- 2. Monthly Revenue, AOV, and Order Volume Trend Analysis
 -- ===============================================================
 
 SELECT 
@@ -30,7 +44,7 @@ GROUP BY d.year, d.month
 ORDER BY d.year, d.month;
 
 -- =============================================
--- Shipping Cost vs Profit Margin by Order Size
+-- 3. Shipping Cost vs Profit Margin by Order Size
 -- =============================================
 
 SELECT 
@@ -54,7 +68,7 @@ GROUP BY
 ORDER BY order_size_bucket;
 
 -- =============================================================================
--- Seller Revenue Distribution (Pareto Analysis)
+-- 4. Seller Revenue Distribution (Pareto Analysis)
 -- Analyzes contribution of top 10% sellers to total revenue.
 -- =============================================================================
 
