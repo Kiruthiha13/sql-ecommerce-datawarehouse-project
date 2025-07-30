@@ -1,6 +1,16 @@
--- ==================================================
--- RFM-Based Segmentation: Repeat vs One-Time Buyers
--- ==================================================
+/* 
+============================================================================
+CUSTOMER BEHAVIOR & EXPERIENCE ANALYSIS:
+This script analyzes customer behavior patterns using RFM segmentation,
+evaluates the impact of installment plans on order value and returns,
+explores how delivery and shipping factors influence satisfaction,
+and identifies churned vs active customers based on recent activity.
+============================================================================
+*/
+
+-- =====================================================
+-- 1. RFM-Based Segmentation: Repeat vs One-Time Buyers
+-- =====================================================
 
 WITH customer_orders AS (
     SELECT
@@ -36,9 +46,9 @@ FROM rfm_features
 GROUP BY customer_type
 ORDER BY customer_type;
 
--- =================================================
--- Installment Plan Impact on Order Value & Returns
--- =================================================
+-- ====================================================
+-- 2. Installment Plan Impact on Order Value & Returns
+-- ====================================================
 
 SELECT 
     f.payment_installments,
@@ -51,9 +61,9 @@ WHERE f.payment_installments IS NOT NULL
 GROUP BY f.payment_installments
 ORDER BY f.payment_installments;
 
--- ================================================
--- Delivery Speed & Shipping Cost vs Review Score
--- ================================================
+-- ==================================================
+-- 3. Delivery Speed & Shipping Cost vs Review Score
+-- ==================================================
 
 SELECT 
     f.review_score,
@@ -68,7 +78,7 @@ GROUP BY f.review_score
 ORDER BY f.review_score DESC;
 
 -- ================================================
--- Customer Churn Analysis
+-- 4. Customer Churn Analysis
 -- ================================================
 
 WITH customer_activity AS (
