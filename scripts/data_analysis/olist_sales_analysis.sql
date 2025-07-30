@@ -1,3 +1,12 @@
+/*
+============================================================================
+SALES PERFORMANCE ANALYSIS:
+This script evaluates product-level profitability, identifies monthly 
+sales trends by category, and analyzes seasonal profitability patterns 
+to uncover high-performing time periods and top-margin products.
+============================================================================
+*/
+
 USE olist_datawarehouse;
 GO
 
