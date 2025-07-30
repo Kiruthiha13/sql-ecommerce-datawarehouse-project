@@ -43,7 +43,10 @@ This project covers the full lifecycle of a modern analytics pipeline:
    
 ## 🔍 Analytical Focus Areas
 
-1. Performance Analysis: Comprehensive analysis of product profitability, sales trends, return behavior, and seller performance in an e-commerce marketplace.
+1. Customer behavior & experience analysis
+2. Sales analysis
+3. Revenue analysis
+4. Product performance analysis
 
 🧑‍💻 About Me
 
