@@ -4,12 +4,15 @@ Welcome to the **Olist Data Warehouse and Analytics portfolio project!**
 
 This end-to-end data warehousing and analytics solution demonstrates how to turn raw e-commerce data into structured, insightful reporting using SQL-based engineering and analytical workflows.
 
-## Dataset Information
-**Source:** [Olist Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+## ℹ️ Dataset Information
+
+🔗 **Source:** [Olist Brazilian E-Commerce Public Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+
 **Modifications:**
 1. Original dataset dates were shifted to recent years to maintain recency for analysis purposes.
 2. No other structural or value modifications were made except for date adjustments.
 3. All business insights and metrics are still consistent with the original data.
+
 **Note:** This dataset is used for educational and analytical purposes only. Please refer to the original Kaggle license for usage rights.
 
 ## 🧱 Data Architecture: Medallion Model
