@@ -35,7 +35,7 @@ IF OBJECT_ID('olist_gold.report_customers', 'V') IS NOT NULL
     DROP VIEW olist_gold.report_customers;
 GO
 
-CREATE OR ALTER VIEW olist_gold.report_customers AS
+CREATE VIEW olist_gold.report_customers AS
 WITH customer_orders AS (
     SELECT
         c.customer_id,
