@@ -59,6 +59,10 @@ This project covers the full lifecycle of a modern analytics pipeline:
 3. Revenue analysis
 4. Product performance analysis
 
+## 📈 Revenue Dashboard (Tableau)
+
+The Revenue Dashboard provides a comprehensive view of sales performance and profitability across years, product categories, and key financial metrics, enabling decision-makers to identify growth opportunities and track revenue contribution trends.
+
 🧑‍💻 About Me
 
 Hi there! I'm Kiruthiha. I’m an IT professional working extensively with data to drive insights, support decision-making, and improve business outcomes. I’m passionate about turning raw data into meaningful stories through analysis and visualization.
