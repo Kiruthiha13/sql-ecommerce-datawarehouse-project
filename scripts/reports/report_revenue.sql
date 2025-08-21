@@ -3,10 +3,10 @@ GO
 
 /*
 ===============================================================================
-Sales Report
+Revenue Report
 ===============================================================================
 Purpose:
-    - This view consolidates high-level KPIs from sales data with the 
+    - This view consolidates high-level KPIs from olist data with the 
       ability to filter and drill down by product category, year, and season.
 
 Highlights:
@@ -37,11 +37,11 @@ Outputs:
 ===============================================================================
 */
 
-IF OBJECT_ID('olist_gold.report_sales', 'V') IS NOT NULL
-    DROP VIEW olist_gold.report_sales;
+IF OBJECT_ID('olist_gold.report_revenue', 'V') IS NOT NULL
+    DROP VIEW olist_gold.report_revenue;
 GO
 
-CREATE VIEW olist_gold.report_sales AS
+CREATE VIEW olist_gold.report_revenue AS
 SELECT 
     dp.product_category_name,
     d.year,
