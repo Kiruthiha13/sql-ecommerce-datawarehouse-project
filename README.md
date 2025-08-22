@@ -73,7 +73,7 @@ The Revenue Dashboard provides a comprehensive view of sales performance and pro
 
 [Olist Revenue Dashboard](https://public.tableau.com/app/profile/kiruthiha.s/viz/OlistRevenueDashboard_17548006795020/RevenueDashboard)
 
-🧑‍💻 About Me
+🧑‍💻 **About Me**
 
 Hi there! I'm Kiruthiha. I’m an IT professional working extensively with data to drive insights, support decision-making, and improve business outcomes. I’m passionate about turning raw data into meaningful stories through analysis and visualization.
 
