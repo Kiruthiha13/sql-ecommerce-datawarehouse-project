@@ -62,6 +62,7 @@ This project covers the full lifecycle of a modern analytics pipeline:
 ## 📈 Revenue Dashboard (Tableau)
 
 The Revenue Dashboard provides a comprehensive view of sales performance and profitability across years, product categories, and key financial metrics, enabling decision-makers to identify growth opportunities and track revenue contribution trends.
+[Olist Revenue Dashboard](https://public.tableau.com/app/profile/kiruthiha.s/viz/OlistRevenueDashboard_17548006795020/RevenueDashboard)
 
 🧑‍💻 About Me
 
