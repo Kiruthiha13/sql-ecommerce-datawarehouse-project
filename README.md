@@ -52,14 +52,14 @@ This project covers the full lifecycle of a modern analytics pipeline:
 1. Explore and document the database schema, column types, and relationships.
 2. Analyze key business entities like customers, orders, products, sellers, and payments.
    
-## 🔍 Analytical Focus Areas
+## 🔍 Analytics & Reporting
 
 1. Customer behavior & experience analysis
 2. Sales analysis
 3. Revenue analysis
 4. Product performance analysis
 
-## 📈 Business Insights
+📈 **Business Insights**
 
 1. Customer Insights: Found average customer spend as R$160.58; identified installment-1 payments as high-volume but linked to low reviews and high cancellations; confirmed 5-star reviews drive faster, cheaper deliveries.
 2. Product Insights: Flagged bed/bath/table as high-risk for returns/cancellations, revealed computers category incurs the highest freight costs (R$47.63).
@@ -67,7 +67,7 @@ This project covers the full lifecycle of a modern analytics pipeline:
 4. Revenue Insights: Found credit card as top revenue driver but with highest cancellations, debit card lowest cancellation (0.42%) but lowest adoption. Analyzed year-over-year growth (2021–2023: revenue ↑ from R$354 → R$11.58M, AOV ↑ from 59 → 140).
 5. Seller Insights: Identified that top 10% of sellers contribute ~67% of sales, highlighting concentration risk and opportunities for seller performance management.
 
-## 📊 Revenue Dashboard (Tableau)
+📊 **Revenue Dashboard**
 
 The Revenue Dashboard provides a comprehensive view of sales performance and profitability across years, product categories, and key financial metrics, enabling decision-makers to identify growth opportunities and track revenue contribution trends.
 
